@@ -1,3 +1,4 @@
+const API_ORIGIN = (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/$/, "") ?? "";
 const BASE = import.meta.env.BASE_URL.replace(/\/$/, "");
 
 function getToken() {
@@ -12,7 +13,7 @@ async function apiFetch<T = unknown>(path: string, options?: RequestInit): Promi
   };
   if (token) headers["Authorization"] = `Bearer ${token}`;
 
-  const res = await fetch(`${BASE}/api${path}`, {
+  const res = await fetch(`${API_ORIGIN}${BASE}/api${path}`, {
     ...options,
     headers,
   });
