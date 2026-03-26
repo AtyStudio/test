@@ -75,7 +75,8 @@ export default function Messages() {
     const conv = activeConvRef.current;
     if (!conv) return;
     try {
-      const msgs = await api.getThread(conv.otherId);
+      const raw = await api.getThread(conv.otherId);
+      const msgs = Array.isArray(raw) ? raw : [];
       setThread(prev => {
         if (prev.length === msgs.length && prev.every((m, i) => m.id === msgs[i].id)) {
           return prev;
@@ -95,7 +96,8 @@ export default function Messages() {
 
   const pollConversations = useCallback(async () => {
     try {
-      const data = await api.getConversations();
+      const raw = await api.getConversations();
+      const data = Array.isArray(raw) ? raw : [];
       setConversations(data);
       const current = activeConvRef.current;
       if (current) {
@@ -143,7 +145,8 @@ export default function Messages() {
 
   const loadConversations = async () => {
     try {
-      const data = await api.getConversations();
+      const raw = await api.getConversations();
+      const data = Array.isArray(raw) ? raw : [];
       setConversations(data);
       if (data.length > 0) {
         const targetId = routeUserId;
@@ -175,8 +178,8 @@ export default function Messages() {
           unreadCount: 0,
         };
         setActiveConv(syntheticConv);
-        const msgs = await api.getThread(routeUserId);
-        setThread(msgs);
+        const rawMsgs = await api.getThread(routeUserId);
+        setThread(Array.isArray(rawMsgs) ? rawMsgs : []);
       }
     } catch {
       toast({ variant: "destructive", title: t("common.error"), description: t("messages.error") });
@@ -189,8 +192,8 @@ export default function Messages() {
     setActiveConv(conv);
     setIsLoadingThread(true);
     try {
-      const msgs = await api.getThread(conv.otherId);
-      setThread(msgs);
+      const raw = await api.getThread(conv.otherId);
+      setThread(Array.isArray(raw) ? raw : []);
       setTimeout(() => scrollToBottom("smooth"), 100);
     } catch {
       toast({ variant: "destructive", title: t("common.error"), description: t("messages.threadError") });

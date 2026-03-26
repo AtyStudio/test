@@ -39,7 +39,7 @@ export default function Favorites() {
   useEffect(() => {
     if (!user) return;
     api.getFavorites()
-      .then(data => setFavorites(data))
+      .then(data => setFavorites(Array.isArray(data) ? data : []))
       .catch(() => toast({ variant: "destructive", title: t("common.error"), description: t("favorites.error") }))
       .finally(() => setIsLoading(false));
   }, [user]);

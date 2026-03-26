@@ -145,7 +145,7 @@ export default function People() {
     if (!user) return;
     setIsLoading(true);
     api.getPeopleMatches({ city: filterCity || undefined, lifestyle: filterLifestyle || undefined })
-      .then(setMatches)
+      .then(m => setMatches(Array.isArray(m) ? m : []))
       .catch(() => {})
       .finally(() => setIsLoading(false));
   }, [user, filterCity, filterLifestyle]);

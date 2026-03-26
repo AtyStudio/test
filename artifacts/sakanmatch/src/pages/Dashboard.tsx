@@ -86,13 +86,13 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (!user) return;
-    api.getRequests().then(setRequests).catch(() => {});
-    api.getConversations().then(setConversations).catch(() => {});
+    api.getRequests().then(r => setRequests(Array.isArray(r) ? r : [])).catch(() => {});
+    api.getConversations().then(c => setConversations(Array.isArray(c) ? c : [])).catch(() => {});
     if (user.role === "seeker") {
       api.getPreferences().then(p => setPreferences(p)).catch(() => {});
-      api.getFavorites().then(f => setFavorites(f)).catch(() => {});
+      api.getFavorites().then(f => setFavorites(Array.isArray(f) ? f : [])).catch(() => {});
       api.getProfile().then(p => setFullProfile(p)).catch(() => {});
-      api.getPeopleMatches().then(matches => setTopPeopleMatches(matches.slice(0, 3))).catch(() => {});
+      api.getPeopleMatches().then(matches => setTopPeopleMatches(Array.isArray(matches) ? matches.slice(0, 3) : [])).catch(() => {});
     }
   }, [user]);
 

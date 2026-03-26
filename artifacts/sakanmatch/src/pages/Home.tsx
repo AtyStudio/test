@@ -26,7 +26,7 @@ export default function Home() {
   useEffect(() => {
     if (user?.role === "seeker") {
       api.getFavoriteIds()
-        .then(ids => setFavoriteIds(ids))
+        .then(ids => setFavoriteIds(Array.isArray(ids) ? ids : []))
         .catch(() => {});
     }
   }, [user]);
