@@ -33,7 +33,7 @@ export function requireAuth(req: AuthRequest, res: Response, next: NextFunction)
       .from(usersTable)
       .where(eq(usersTable.id, payload.userId))
       .limit(1)
-      .then(async ([user]) => {
+      .then(async ([user]: [typeof usersTable.$inferSelect | undefined]) => {
         if (!user) {
           res.status(401).json({ error: "Unauthorized", message: "User not found" });
           return;
@@ -72,7 +72,7 @@ export function requireAuth(req: AuthRequest, res: Response, next: NextFunction)
         };
         next();
       })
-      .catch((err) => {
+      .catch((err: unknown) => {
         req.log.error({ err }, "Error looking up user");
         res.status(500).json({ error: "Internal server error" });
       });
